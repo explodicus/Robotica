@@ -40,7 +40,7 @@ void setup() {
   LCD.print("   Welcome to   ");
   LCD.setCursor(0,1);
   LCD.print(" THE MEMORY GAME");
-  delay(5000);
+  delay(5000); // Welcome Screen
   LCD.clear();
 }
 
@@ -96,7 +96,7 @@ int mapping(int data)
 // moves the cursor on the matrix
 void move()
 {
-  delay(100);
+  delay(100); // Delay for the User to see the cursor position
   printMatrix(userMatrix);
   lc.setLed(0,currentX,currentY,false);
   valueX = analogRead(joyX);
@@ -129,7 +129,7 @@ bool makeAMove()
   while (digitalRead(button) == 1)
     move();
   while(digitalRead(button) == 0)
-    delay(1);
+    delay(1); // waits for the press of the button
   if (startMatrix[currentX][currentY])
   {
     userMatrix[currentX][currentY] = true;
@@ -145,7 +145,8 @@ void win()
   if (isTime)
     indexTime = indexTime * 0.9;
   else
-    numberComplexity++;
+    if (numberComplexity != 64)
+      numberComplexity++;
   timeComplexity -= indexTime;
   lives++;
   for (int row=0; row<8; row++)
@@ -153,7 +154,7 @@ void win()
     for (int col=0; col<8; col++)
     {
       lc.setLed(0,col,row,true); // turns on LED at col, row
-      delay(25);
+      delay(25); // Win screen
     }
   }
  
@@ -162,7 +163,7 @@ void win()
     for (int col=0; col<8; col++)
     {
       lc.setLed(0,col,row,false); // turns off LED at col, row
-      delay(25);
+      delay(25); // Win screen
     }
   }
 }
@@ -171,6 +172,10 @@ void lose()
 {
   emptyMatrix(startMatrix);
   printMatrix(startMatrix);
+  LCD.clear();
+  LCD.print("Final Score: ");
+  LCD.print(score);
+  delay(3000); //Gives the user time to read
   LCD.clear();
   LCD.print("  Want to play  ");
   LCD.setCursor(0,1);
@@ -182,7 +187,7 @@ void lose()
   {
     LCD.clear();
     LCD.print("    GOODBYE     "); 
-    delay(100000);
+    delay(100000); // end of game
   }
   else
   {
@@ -198,7 +203,7 @@ void setDifficulty()
   LCD.print("Select Dificulty");
   LCD.setCursor(0,1);
   LCD.print("Time      Number");
-  delay(500);
+  delay(500); // gives the user time to read
   int choice = analogRead(joyY);
   while(choice > 400 && choice < 600)
     choice = analogRead(joyY);
@@ -211,7 +216,7 @@ void setDifficulty()
     isTime = true;
     numberComplexity = 5;
     indexTime = 500;
-    delay(1000);
+    delay(500);// gives the user time to read
   }
   else
   {
@@ -222,7 +227,7 @@ void setDifficulty()
     isTime = false;
     numberComplexity = 5;
     indexTime = 0;
-    delay(1000);
+    delay(500); // gives the user time to read
   }
 }
 
@@ -233,12 +238,12 @@ void level()
   emptyMatrix(startMatrix);
   createRandom(startMatrix, numberComplexity);
   printMatrix(startMatrix);
-  delay(timeComplexity);
+  delay(timeComplexity); // time to remember the configuration
   emptyMatrix(userMatrix);
   int i;
   int pointsGuessed = 0;
   int currentLevelLives = lives;
-  for (i = 0; i<numberComplexity+lives && currentLevelLives > 0; i++)
+  for (i = 0; i<numberComplexity+currentLevelLives && lives > 0; i++)
   {
     Serial.println(i);
     Serial.println(timeComplexity);
