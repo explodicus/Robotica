@@ -10,3 +10,6 @@ LCD display (pentru interacționarea cu userul);
 Arduino;
 Breadboard;
 Fire;
+
+Video
+https://drive.google.com/open?id=1IUH9JOj0uX2m0V0K9hs7qBiWi2FiKIvv
